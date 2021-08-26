@@ -1,0 +1,7 @@
+.video-stream{
+    width: 300px;
+    height: auto;
+    object-fit: cover;
+    @apply border-2 border-gray-500;
+    
+}

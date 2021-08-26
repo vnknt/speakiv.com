@@ -1,0 +1,81 @@
+.roomCard{
+    @apply
+    bg-gray-50 bg-opacity-40 dark:bg-gray-500 dark:bg-opacity-30 dark:text-white 
+    
+
+    border-2
+    rounded-lg
+    px-4 py-4
+    border-gray-900
+    shadow-2xl 
+    ;
+
+}
+
+
+.title{
+    @apply flex ;
+}
+
+.description{
+    min-height: 5rem;
+    max-height: 5rem;
+    
+    @apply font-thin;
+ 
+}
+
+.users{
+    @apply 
+    flex
+    ;
+}
+
+.footer{
+    @apply
+    flex
+    justify-end
+    ;
+}
+
+.userAvatar{
+    @apply
+    w-12
+    rounded-full
+    border-2
+    border-white
+    mr-3
+    shadow-lg
+    ;
+}
+
+
+.joinButton{
+    color:white;
+    @apply
+
+    bg-blue-700
+    px-3.5 py-2
+    rounded
+    border
+    border-gray-400;
+    
+    text-decoration: none;
+    
+}
+
+.joinButton:hover{
+   @apply
+   bg-blue-800
+   border-gray-500
+   
+   ;
+
+}
+
+.joinButton:active{
+    position: relative;
+    left: 1px;
+    top:1px
+}
+

@@ -1,0 +1,56 @@
+.darkModeToggle{
+
+    width: 60px;
+    -webkit-appearance: none;
+    height: 29px;
+    
+    @apply
+    
+    bg-yellow-400
+    border-2
+    border-gray-50
+    rounded-full
+    relative
+    ;
+    transition: .25s;
+
+}
+
+.darkModeToggle:checked{
+@apply
+bg-gray-600
+
+;
+
+}
+
+
+
+.darkModeToggle:before{
+    @apply
+    absolute
+    border
+    bg-gray-500
+    ;
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    top:0;
+    left:-5px;
+    border-radius: 25px;
+    transform: scale(1.25);
+    transition: 0.4s;
+
+}
+.darkModeToggle:checked:before{
+    left: 35px;
+    @apply
+    bg-gray-200
+
+    border-gray-600
+    ;
+
+
+
+}

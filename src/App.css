@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
+
+
+.App {
+  
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1em;
+  @apply
+    text-black
+  dark:text-white ;
+}
+
+
+.app-container{
+  min-height: 100vh;
+  
+    @apply
+    bg-black bg-opacity-0
+    dark:bg-opacity-90;
+    
+}
+
+.background-black{
+  @apply bg-black bg-opacity-90;
+}
+
