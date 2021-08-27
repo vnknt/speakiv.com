@@ -12,18 +12,23 @@ const axiosJwt = axios.create()
         let token_access = localStorage.getItem("accessToken");
         let token_refresh = localStorage.getItem("refreshToken");
 
-        
         if(token_refresh==null || token_refresh==undefined || token_access==null || token_access==undefined){
+            console.log("undef")
           return config
         }
-    
-        let accessTokenExpires = jwt_decode(token_access).exp
-    
-        if(accessTokenExpires * 1000 <=  Date.now()-5000  ){
-            let userService = new UserService()
+        
+        let accessTokenExpires = await jwt_decode(token_access).exp
+        let currentDate = new Date()
+        console.log(accessTokenExpires * 1000, currentDate.getTime())
 
-            let response = await userService.refreshToken()
+        
+        if(accessTokenExpires * 1000 <=  currentDate.getTime()-50000 ){
             
+            
+            let userService = new UserService()
+            let response = await userService.refreshToken()
+            console.log("expired")
+            console.log(response)
             if(response.data.success){
 
                 let new_refresh_token = response.data.data.refreshToken
@@ -33,16 +38,14 @@ const axiosJwt = axios.create()
                 localStorage.setItem("refreshToken",new_refresh_token)
                 
                 console.log(new_refresh_token)
-
                 config.headers["authorization"] = "Bearer "+new_access_token
 
-            }
-            
+            } 
 
-            
-            return config
+
+
         }else{
-
+            console.log("not expired")
             config.headers["authorization"]  ="Bearer "+token_access
             
         }

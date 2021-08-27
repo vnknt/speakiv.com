@@ -8,7 +8,8 @@ import { Link } from 'react-router-dom'
 export default function RoomCard({id,title,language}) {
     console.log(language)
     return (
-        <div className={`col-md-6 col-lg-4 col-xs-12 p-5 ${styles.roomCard}`}>
+        <div className="col-md-6 col-lg-4 col-xs-12 p-2  ">
+        <div className={`${styles.roomCard}`}>
             <h4>{title}</h4>
             <div className={styles.description}>
                 <label>
@@ -26,6 +27,7 @@ export default function RoomCard({id,title,language}) {
             <div className={styles.footer}>
                 <Link className={styles.joinButton} role="button" to={`/rooms/${id}`}  >Join Room</Link>
             </div>
+        </div>
         </div>
     )
 }

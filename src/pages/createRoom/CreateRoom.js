@@ -48,7 +48,7 @@ export default function CreateRoom() {
 
     async function createRoom(values){
 
-        document.getElementById("createRoomSubmit").setAttribute('disabled',true)
+        //document.getElementById("createRoomSubmit").setAttribute('disabled',true)
         let roomService = new RoomService()
         let result  =await  roomService.createRoom(values)
         

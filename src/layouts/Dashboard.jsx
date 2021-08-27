@@ -19,7 +19,7 @@ export default function Dashboard() {
 
     return (
         <div>
-            <div className="row">
+            <div className="row pt-5">
                 <div className=" col-12">
                     <Route exact path="/" component={Home} />
 

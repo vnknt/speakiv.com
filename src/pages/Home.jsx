@@ -37,6 +37,8 @@ export default function Home() {
             <div className="row">
                 
                 {rooms.map((room)=>{
+                    <div className="">
+                        </div>
                     return <RoomCard id={room._id} title={room.name} language={room.language.name} key={room.id}></RoomCard>
 
                 })} 
