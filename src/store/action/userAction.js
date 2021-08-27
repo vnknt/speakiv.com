@@ -14,5 +14,13 @@ export const login = (token)=>{
      }
  }
 
+ export const refreshTokens = (token)=>{
+    return {
+        type:"REFRESH_TOKENS",
+        payLoad:token
+    }
+}
+
+
  
 

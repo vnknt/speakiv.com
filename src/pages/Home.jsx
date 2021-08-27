@@ -27,8 +27,8 @@ export default function Home() {
 
     return (
         <>
-            <div class="row">
-                <div class="col-12 d-flex justify-center  mb-4 mt-3">
+            <div className="row">
+                <div className="col-12 d-flex justify-center  mb-4 mt-3">
 
                     <Link as="button" to="/room/create" className="btn btn-primary">Create Room</Link>
 
@@ -37,7 +37,7 @@ export default function Home() {
             <div className="row">
                 
                 {rooms.map((room)=>{
-                    return <RoomCard id={room._id} title={room.name} language={room.language.name} ></RoomCard>
+                    return <RoomCard id={room._id} title={room.name} language={room.language.name} key={room.id}></RoomCard>
 
                 })} 
                     

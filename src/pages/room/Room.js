@@ -1,12 +1,14 @@
 
 import Peer from "peerjs";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,useHistory } from "react-router-dom";
+import { Redirect } from "react-router";
 import styles from './Room.module.css'
 import { io } from "socket.io-client";
 import connectedUserCard from "../../components/connectedUserCard/ConnectedUserCard";
 import React from "react";
 import ActiveUsersWrapper from "../../components/ActiveUsersWrapper/ActiveUsersWrapper";
+import RoomService from "../../services/roomService";
 export default function Room(props) {
 
     const [remoteId, setRemoteId] = useState("");
@@ -20,7 +22,8 @@ export default function Room(props) {
     const [activeUsers,setActiveUsers] = useState([])
     let [arr , setArr] = useState([])
 
-    const socket = io.connect("localhost:3002")
+    const history = useHistory()
+    const socket = io.connect("192.168.1.103:3002")
 
     let peer = new Peer();
 
@@ -45,12 +48,12 @@ export default function Room(props) {
 
     const handleConnect = (remotePeerId) => {
 
-        var audio_element = document.createElement("audio")
+        // var audio_element = document.createElement("audio")
 
         navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then((stream) => {
             const call = peer.call(remotePeerId, stream)
-
-            addObjectStream(audio_element, stream)
+            
+            // addObjectStream(audio_element, stream)
             
             call.on("stream",(stream)=>{
                 
@@ -98,12 +101,16 @@ export default function Room(props) {
 
 
     useEffect(() => {
+        
 
-
-        peer.on('call', (call) => {
-            navigator.mediaDevices.getUserMedia({audio:true,video:false}).then(stream=>{
+            peer.on('call', (call) => {
+                
+                navigator.mediaDevices.getUserMedia({audio:true,video:false}).then(stream=>{
                 call.answer(stream)
+
             })
+
+
             
             call.on('stream', (stream) => {
                 
@@ -135,7 +142,9 @@ export default function Room(props) {
         video.classList.add(styles.video-stream)
         
         video.srcObject = stream
+        video.muted=true
         video.addEventListener('loadedmetadata', () => {
+            
             video.play()
             
         })
@@ -143,12 +152,33 @@ export default function Room(props) {
     }
 
     
+async function isRoomExist(){
+    
+    let roomService = new RoomService()
+    
+    let response = await  roomService.getRoomById(roomId).then(response=>{return response})
+    if(!response.data.success){
+        history.push('/')
+    }
+    return  await response.data.success
 
+}
 
 
     return (
     
-        <> {activeUsers.map(i=>{
+        <>  
+
+        { !isRoomExist() ?
+        
+        //   <Redirect to="/" ></Redirect>
+        ""
+        :
+    
+        
+        <>
+        
+        {activeUsers.map(i=>{
             return(<h1>{i.userName}</h1>)
         })}
             <div className={`d-flex justify-content-center pt-5 mt-5 ${joined ? "d-none " : " d-block"}`} >
@@ -168,6 +198,10 @@ export default function Room(props) {
 
 
             </div>
+        </>
+        
+        
+    }
         </>
 
 

@@ -6,26 +6,30 @@ import Navi from './components/navbar/navbar.jsx'
 import 'semantic-ui-css/semantic.min.css'
 
 import Dashboard from './layouts/Dashboard';
-import Peer from 'peerjs';
-import { useEffect, useState } from 'react';
 
-function App() {
- 
- 
+import { useDispatch, useSelector } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+  
+
+function App() {  
+  // const isLoggedIn = useSelector(state=>state.user)
+  // const dispatch = useDispatch()
 
   return (
 
     <div className="App">
+
       <div className="app-container">
         <Navi/>
 
         <div className="container pt-5">
-
           <Dashboard></Dashboard>
           
         </div>
 
       </div>
+      <ToastContainer position="bottom-right"></ToastContainer>
     </div>
 
   );

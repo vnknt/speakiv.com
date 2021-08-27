@@ -1,5 +1,5 @@
 import React from 'react'
-import { act } from 'react-dom/cjs/react-dom-test-utils.production.min'
+
 import ConnectedUserCard from '../connectedUserCard/ConnectedUserCard'
 import { useState , useEffect } from 'react'
 

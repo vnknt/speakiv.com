@@ -43,8 +43,11 @@ export default function Login() {
         loginResult=loginResult.data
 
         if(loginResult.success){
-            let token = loginResult.data    
-             dispatch(login(token))
+
+            let accessToken = loginResult.data.accessToken;
+            let refreshToken= loginResult.data.refreshToken;
+
+             dispatch(login({accessToken,refreshToken}))
             
         }else{
 

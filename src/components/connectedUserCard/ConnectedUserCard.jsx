@@ -8,6 +8,7 @@ export default function ConnectedUserCard({userName,profileImg,stream}) {
 
     var audio_element = document.createElement("video")
     audio_element.srcObject=stream
+
     audio_element.play()
 
 

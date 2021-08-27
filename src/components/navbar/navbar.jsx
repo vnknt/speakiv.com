@@ -6,6 +6,7 @@ import useSidebar from '../../hook/useSidebar';
 import {useSelector,useDispatch} from 'react-redux'
 import { logout } from '../../store/action/userAction';
 import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 export default function Navi() {
   const [colorTheme, setTheme] = useDarkMode();
   const [sidebarState, setSidebarState] = useSidebar();
@@ -52,6 +53,8 @@ export default function Navi() {
         <button className="navbar-toggler" type="button" onClick={() => { openSideBar() }} >
           <span className="navbar-toggler-icon"></span>
         </button>
+        {isLoggedIn?<Link to="/logout" className="nav-link"  >Logout</Link>:<button className="nav-link " onClick={()=>{handleLogin()}} href="#">Login</button>}
+              
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item active">
@@ -66,7 +69,6 @@ export default function Navi() {
             <li className="nav-item">
 
 
-              {isLoggedIn?<button className="nav-link" onClick={()=>{handleLogout()}} href="#">Logout</button>:<button className="nav-link " onClick={()=>{handleLogin()}} href="#">Login</button>}
               
 
 

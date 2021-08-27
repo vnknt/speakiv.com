@@ -17,9 +17,9 @@ export default function RoomCard({id,title,language}) {
 
             </div>
             <div className={styles.users}>
-                <img className={styles.userAvatar} src="https://vnknt.github.io/assets/img/pp.jpg"></img>
-                <img className={styles.userAvatar} src="https://vnknt.github.io/assets/img/pp.jpg"></img>
-                <img className={styles.userAvatar} src="https://vnknt.github.io/assets/img/pp.jpg"></img>
+                <img alt="avatar" className={styles.userAvatar} src="https://vnknt.github.io/assets/img/pp.jpg"></img>
+                <img alt="avatar" className={styles.userAvatar} src="https://vnknt.github.io/assets/img/pp.jpg"></img>
+                <img alt="avatar" className={styles.userAvatar} src="https://vnknt.github.io/assets/img/pp.jpg"></img>
 
             </div>
 
