@@ -10,8 +10,14 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import configureStore from './store/configureStore'
 import { Provider } from 'react-redux';
+import CustomAxios from './services/axiosJwt';
 
 const store= configureStore()
+
+CustomAxios.config(store)
+
+
+
 
 ReactDOM.render(
 <Provider store={store}>

@@ -1,5 +1,5 @@
 
-import {axiosJwt}  from "./axiosJwt";
+import CustomAxios  from "./axiosJwt";
 import { apiUrl } from "./constants";
 import axios from "axios";
 
@@ -17,7 +17,7 @@ export default class UserService{
 
     logout(){
 
-        return axiosJwt.post(`http://${apiUrl}/auth/logout`)
+        return CustomAxios.jwt().post(`http://${apiUrl}/auth/logout`)
         
     }
 
@@ -37,8 +37,6 @@ export default class UserService{
 
 
     }
-
-
 
 
 

@@ -21,6 +21,11 @@ export const login = (token)=>{
     }
 }
 
-
+export const clearUserState = ()=>{
+    return {
+        type:"CLEAR_USER_STATE",
+        
+    }
+}
  
 

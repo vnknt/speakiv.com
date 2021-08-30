@@ -13,12 +13,12 @@ export default function Logout() {
         
         dispatch(logout())
         history.replace('/')
-        
-
+    
     }, [])
 
 
 
+    
     return (
         <>
         </>

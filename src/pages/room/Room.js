@@ -23,7 +23,7 @@ export default function Room(props) {
     let [arr , setArr] = useState([])
 
     const history = useHistory()
-    const socket = io.connect("192.168.1.103:3002")
+    const socket = io.connect(process.env.REACT_APP_SOCKET_URL)
 
     let peer = new Peer();
 
