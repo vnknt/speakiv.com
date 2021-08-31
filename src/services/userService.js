@@ -13,6 +13,9 @@ export default class UserService{
 
     }
 
+    getUserById(userId){
+        return axios.get(`http://${apiUrl}/users/getById/${userId}`)
+    }
 
 
     logout(){
