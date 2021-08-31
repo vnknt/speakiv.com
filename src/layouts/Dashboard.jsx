@@ -22,12 +22,9 @@ export default function Dashboard() {
             <div className="row pt-5">
                 <div className=" col-12">
                     <Route exact path="/" component={Home} />
-
                     <PrivateRoute authed={authed}  exact path="/room/create" component={CreateRoom}/>
-
                     <PrivateRoute authed={authed}  path="/rooms/:roomId" component={Room}/>
                     <PrivateRoute authed={authed}  path="/logout" component={Logout}/>
-
                     <Route  path="/login"   component={Login}/>
                     
                     

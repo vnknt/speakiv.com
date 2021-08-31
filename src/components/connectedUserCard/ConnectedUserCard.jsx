@@ -2,7 +2,8 @@ import React from 'react'
 import styles from './connectedUserCard.module.css'
 import hark from "hark";
 import { useState,useEffect } from 'react';
-export default function ConnectedUserCard({userName,profileImg,stream}) {
+import UserService from '../../services/userService';
+export default function ConnectedUserCard({id,userName,profileImg,stream}) {
 
     const [isSpeaking,setSpeaking] = useState(false)
 
@@ -13,6 +14,21 @@ export default function ConnectedUserCard({userName,profileImg,stream}) {
 
 
     useEffect(()=>{
+
+
+        let userService = new UserService()
+
+        
+
+
+
+
+
+
+
+
+
+
         var audioMonitor = hark(stream)
         audioMonitor.on('speaking',()=>{
             setSpeaking(true)
@@ -38,7 +54,7 @@ export default function ConnectedUserCard({userName,profileImg,stream}) {
         
             <div className={`col-2 ${styles.connectedUserCard} ${isSpeaking?styles.audio_active:styles.audio_default}`} >
                 {userName}
-                {profileImg}
+                
             </div>
         
     )

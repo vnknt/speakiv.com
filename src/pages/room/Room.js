@@ -9,13 +9,19 @@ import connectedUserCard from "../../components/connectedUserCard/ConnectedUserC
 import React from "react";
 import ActiveUsersWrapper from "../../components/ActiveUsersWrapper/ActiveUsersWrapper";
 import RoomService from "../../services/roomService";
+import UserService from "../../services/userService";
+import jwtDecode from "jwt-decode";
+
+
+
 export default function Room(props) {
 
     const [remoteId, setRemoteId] = useState("");
     const [peerId, setPeerId] = useState("");
-    const [calls, setCalls] = useState([])
-    const [callAccepted, setCallAccepted] = useState(false)
-    const [audioVolume, setAudioVolume] = useState(0.0)
+    const [selfUserId,setSelfUserId] = useState("")
+    // const [calls, setCalls] = useState([])
+    // const [callAccepted, setCallAccepted] = useState(false)
+
     const [joined, setJoined] = useState(false)
     const [isAbleToJoin, setIsAbleToJoin] = useState(false)
 
@@ -23,7 +29,7 @@ export default function Room(props) {
     let [arr , setArr] = useState([])
 
     const history = useHistory()
-    const socket = io.connect(process.env.REACT_APP_SOCKET_URL)
+    const socket = io.connect(process.env.REACT_APP_SOCKET_URL,{query:{token:localStorage.getItem("accessToken")}})
 
     let peer = new Peer();
 
@@ -46,19 +52,26 @@ export default function Room(props) {
 
 
 
-    const handleConnect = (remotePeerId) => {
+    const handleConnect = (remotePeerId,userId) => {
 
         // var audio_element = document.createElement("audio")
 
         navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then((stream) => {
-            const call = peer.call(remotePeerId, stream)
+
+
+            const call = peer.call(remotePeerId, stream,{metadata:{userId:selfUserId}})
             
+
+
             // addObjectStream(audio_element, stream)
             
-            call.on("stream",(stream)=>{
+            call.on("stream",async (stream)=>{
                 
-
-                let currentUserArr = [{userName:"User 2", profileImg:"image ",stream:stream}]
+                let userService = new UserService()
+                let userResult = await userService.getUserById(userId);
+                console.log(userResult)
+                
+                let currentUserArr = [{userName:userResult.data.data.username, profileImg:"image ",stream:stream}]
                 
                 setActiveUsers(arr=>[...arr,...currentUserArr])
                 
@@ -78,9 +91,10 @@ export default function Room(props) {
         setJoined(true)
 
         socket.emit("join-room", roomId, peerId)
-        socket.on('user-connected', (userId) => {
 
-            handleConnect(userId)
+        socket.on('user-connected', (userId,peerId) => {
+           
+            handleConnect(peerId,userId)
 
         })
 
@@ -92,11 +106,20 @@ export default function Room(props) {
         if (peerId !== "") {
 
             setIsAbleToJoin(true)
+
         }
 
         console.log(peerId)
 
     }, [peerId])
+
+
+
+    useEffect(async ()=>{
+        let id = await jwtDecode(localStorage.getItem("accessToken")).user_id
+        setSelfUserId(id)
+    },[])
+
 
 
 
@@ -112,9 +135,14 @@ export default function Room(props) {
 
 
             
-            call.on('stream', (stream) => {
+            call.on('stream', async(stream) => {
                 
-                let currentUserArr = [{userName:"User 1", profileImg:"image ",stream:stream}]
+                let userService = new UserService()
+                let userId = call.metadata.userId
+                let userResult = await userService.getUserById(userId);
+                console.log(`USER_ID : ${userId}`)
+                
+                let currentUserArr = [{userName:userResult.data.data.username, profileImg:"image ",stream:stream}]
                 
                 setActiveUsers(arr=>[...arr,...currentUserArr])
                 

@@ -18,7 +18,7 @@ export default function ActiveUsersWrapper({users}) {
     let i=0;
     return (
         
-        <div className="col-12 border-2 border-red-500" id="online-users" >
+        <div className="row border-2 border-red-500" id="online-users" >
             
             { 
                 
