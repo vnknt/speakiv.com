@@ -86,7 +86,7 @@ export default function Navi() {
 
       <Navbar bg="dark" className="px-3" variant="dark" expand="lg" style={{position:"fixed",width:"100%"}}>
 
-    <Link to="/" className="navbar-brand">React-Bootstrap</Link>
+    <Link to="/" className="navbar-brand">Speakiv</Link>
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
       <Nav className="me-auto">
