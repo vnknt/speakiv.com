@@ -13,25 +13,18 @@ import 'react-toastify/dist/ReactToastify.css';
   
 
 function App() {  
-  // const isLoggedIn = useSelector(state=>state.user)
-  // const dispatch = useDispatch()
 
   return (
 
     <div className="App">
-
       <div className="app-container">
         <Navi/>
-
         <div className="container pt-5">
           <Dashboard></Dashboard>
-          
         </div>
-
       </div>
       <ToastContainer position="bottom-right"></ToastContainer>
     </div>
-
   );
 }
 
