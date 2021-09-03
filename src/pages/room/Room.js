@@ -1,6 +1,6 @@
 
 import Peer from "peerjs";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams,useHistory } from "react-router-dom";
 import { Redirect } from "react-router";
 import styles from './Room.module.css'
@@ -16,33 +16,27 @@ import jwtDecode from "jwt-decode";
 
 export default function Room(props) {
 
-    const [remoteId, setRemoteId] = useState("");
     const [peerId, setPeerId] = useState("");
     const [selfUserId,setSelfUserId] = useState("")
-    // const [calls, setCalls] = useState([])
-    // const [callAccepted, setCallAccepted] = useState(false)
-
+    const [calls,setCalls] = useState([])
     const [joined, setJoined] = useState(false)
     const [isAbleToJoin, setIsAbleToJoin] = useState(false)
 
     const [activeUsers,setActiveUsers] = useState([])
-    let [arr , setArr] = useState([])
 
     const history = useHistory()
-    const socket = io.connect(process.env.REACT_APP_SOCKET_URL,{query:{token:localStorage.getItem("accessToken")}})
+    
 
-    let peer = new Peer();
+    const callsRef = useRef({})
+    callsRef.current={}
+
+    const socket = useRef(io.connect(process.env.REACT_APP_SOCKET_URL,{query:{token:localStorage.getItem("accessToken")}}))
+    const peer = useRef(new Peer())
+    
+    // let peer = ;
 
     let { roomId } = useParams()
 
-    var videoDiv = null;
-
-
-    const handleInput = (event) => {
-
-        setRemoteId(event.target.value)
-
-    }
 
     useEffect(()=>{
 
@@ -54,17 +48,20 @@ export default function Room(props) {
 
     const handleConnect = (remotePeerId,userId) => {
 
-        // var audio_element = document.createElement("audio")
+        if(userId===selfUserId){
+            return
+        }
 
         navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then((stream) => {
 
 
-            const call = peer.call(remotePeerId, stream,{metadata:{userId:selfUserId}})
+            const call = peer.current.call(remotePeerId, stream,{metadata:{userId:selfUserId}})
             
+            //setCalls([...calls,call])
 
+            callsRef.current[userId] = call
 
-            // addObjectStream(audio_element, stream)
-            
+        
             call.on("stream",async (stream)=>{
                 
                 let userService = new UserService()
@@ -82,22 +79,51 @@ export default function Room(props) {
 
 
 
-        }).catch(error => alert(error))
+        }).catch(error => console.log(error))
     }
+
+
+
+
+    const handleDisconnect = (userId)=>{
+        
+        let filtered = activeUsers.filter(user=>{return user.id !==userId})
+        console.log("CALLS:::::::::::::::::::.")
+        console.log(callsRef)
+        //   try{
+        //       calls[userId].close()
+        //   }catch(e){
+        //       console.log(e.message)
+        //   }
+            
+        
+
+        setActiveUsers(arr=>[...filtered])
+
+        
+
+    }
+
+
 
     const joinRoom = () => {
 
 
         setJoined(true)
 
-        socket.emit("join-room", roomId, peerId)
+        socket.current.emit("join-room", roomId, peerId)
 
-        socket.on('user-connected', (userId,peerId) => {
+        socket.current.on('user-connected', (userId,peerId) => {
            
             handleConnect(peerId,userId)
 
         })
-
+        socket.current.on('user-disconnected',(userId)=>{
+            
+            if(userId !==selfUserId){
+                handleDisconnect(userId)
+            }
+        })
 
     }
 
@@ -126,11 +152,12 @@ export default function Room(props) {
     useEffect(() => {
         
 
-            peer.on('call', (call) => {
-                
+            peer.current.on('call', (call) => {
+                let userId = call.metadata.userId
                 navigator.mediaDevices.getUserMedia({audio:true,video:false}).then(stream=>{
                 call.answer(stream)
-
+                //setCalls([...calls,call])
+                callsRef.current[userId] = call
             })
 
 
@@ -138,7 +165,7 @@ export default function Room(props) {
             call.on('stream', async(stream) => {
                 
                 let userService = new UserService()
-                let userId = call.metadata.userId
+                
                 let userResult = await userService.getUserById(userId);
                 console.log(`USER_ID : ${userId}`)
                 
@@ -153,31 +180,32 @@ export default function Room(props) {
 
 
         })
-        peer.on('open', (id) => {
+        peer.current.on('open', (id) => {
 
             setPeerId(id)
 
         })
 
+        return ()=>{
+            
+            //peer.current.removeListener('call',()=>{})
+            //peer.current.disconnect()
+            
+            socket.current.removeAllListeners("user-connected");
+            socket.current.removeAllListeners("user-disconnected");
+            peer.current.destroy()
+            
+            console.log(callsRef.current)
 
+            
+            socket.current.emit("user-closed",roomId)
+            socket.current.removeListener('user-disconnected',()=>{})
+
+        }
 
     }, [])
 
 
-
-    const addObjectStream = (video, stream) => {
-        videoDiv = document.getElementById("video-grid")
-        video.classList.add(styles.video-stream)
-        
-        video.srcObject = stream
-        video.muted=true
-        video.addEventListener('loadedmetadata', () => {
-            
-            video.play()
-            
-        })
-
-    }
 
     
 async function isRoomExist(){
@@ -214,14 +242,7 @@ async function isRoomExist(){
             </div>
             <div className={`container ${!joined ? "d-none " : " d-block"}`} >
                 <div className="row ">
-                    {/* <div className="col-12" style={{"border":"1px solid #ff0000"}}>
-                        <div className={`d-flex justify-content-center border-1 ${joined ? "d-block " : " d-none"}`} id="video-grid">
-
-                        </div>
-                    </div> */}
-                    
                     <ActiveUsersWrapper users={activeUsers}></ActiveUsersWrapper>
-
                 </div>
 
 
