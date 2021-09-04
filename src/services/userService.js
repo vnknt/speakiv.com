@@ -26,10 +26,16 @@ export default class UserService{
 
 
 
-    register(name,username,email,password){
+    register(data){
 
 
-        return axios.post(`http://${apiUrl}/users/register`,{username:username,email:email})
+        return axios.post(`http://${apiUrl}/users/register`,{
+            name:data.name,
+            username:data.username,
+            email:data.email,
+            password:data.password
+        
+        })
 
     }
 
