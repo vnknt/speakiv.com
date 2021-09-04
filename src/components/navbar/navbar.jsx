@@ -62,6 +62,12 @@ export default function Navi() {
               {isLoggedIn ? <Link to="/logout" className="nav-link"  >Logout</Link> : <button className="btn btn-primary " onClick={() => { handleLogin() }} href="#">Login</button>}
 
             </Nav.Item>
+            {!isLoggedIn ?
+              <Nav.Item className="mb-2">
+                <Link to="/register" className="nav-link"  >Register</Link>
+              </Nav.Item>
+              : ""
+            }
             <Nav.Item>
               <input type="checkbox" id="themeToggle" className={styles.darkModeToggle} onChange={() => { toggleDarkMode() }} />
 

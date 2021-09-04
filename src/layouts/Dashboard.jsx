@@ -8,6 +8,7 @@ import Room from '../pages/room/Room'
 import PrivateRoute from './PrivateRoute'
 import { useSelector } from 'react-redux'
 import Logout from '../pages/logout/Logout'
+import Register from '../pages/register/Register'
 
 
 export default function Dashboard() {
@@ -25,6 +26,7 @@ export default function Dashboard() {
                     <PrivateRoute authed={authed}  exact path="/room/create" component={CreateRoom}/>
                     <PrivateRoute authed={authed}  path="/rooms/:roomId" component={Room}/>
                     <PrivateRoute authed={authed}  path="/logout" component={Logout}/>
+                    <PrivateRoute authed={!authed}  path="/register" component={Register}/>
                     <Route  path="/login"   component={Login}/>
                     
                     
