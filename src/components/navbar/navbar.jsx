@@ -12,6 +12,9 @@ import { Container } from 'semantic-ui-react';
 export default function Navi() {
   const [colorTheme, setTheme] = useDarkMode();
   const [sidebarState, setSidebarState] = useSidebar();
+  const [expanded, setExpanded] = useState(false);
+
+
 
   const isLoggedIn = useSelector(state => state.user);
 
@@ -45,33 +48,48 @@ export default function Navi() {
 
   }
 
-
-
+  function handleExpanded() {
+    setExpanded(expanded ? false : "expanded")
+  }
+  function closeToggle() {
+    setExpanded(false)
+  }
   return (
     <div >
 
-      <Navbar bg="dark" className="px-3" variant="dark" expand="lg" style={{ position: "fixed", width: "100%" }}>
+      <Navbar bg="dark" className="px-3" variant="dark" expand="sm" expanded={expanded} style={{ position: "fixed", width: "100%", zIndex: "9999" }}>
 
-        <Link to="/" className="navbar-brand">Speakiv</Link>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Link to="/" className="navbar-brand" onClick={closeToggle} >Speakiv</Link>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={handleExpanded} />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Link to="/" className="nav-link">Home</Link>
+          <Nav className="ml-auto">
 
-            <Nav.Item className="mb-2">
-              {isLoggedIn ? <Link to="/logout" className="nav-link"  >Logout</Link> : <button className="btn btn-primary " onClick={() => { handleLogin() }} href="#">Login</button>}
-
+            <Nav.Item className="mb-2 " onClick={closeToggle} >
+              <Link to="/" className="nav-link btn">Home</Link>
             </Nav.Item>
-            {!isLoggedIn ?
-              <Nav.Item className="mb-2">
-                <Link to="/register" className="nav-link"  >Register</Link>
+            {isLoggedIn ?
+              <Nav.Item className="mb-2 " onClick={closeToggle}>
+                <Link to="/logout" className="nav-link btn btn-danger font-weight-bold"  >Logout</Link>
               </Nav.Item>
               : ""
             }
-            <Nav.Item>
-              <input type="checkbox" id="themeToggle" className={styles.darkModeToggle} onChange={() => { toggleDarkMode() }} />
 
+            {!isLoggedIn ?
+              <>
+                <Nav.Item className="mb-2 mr-2" onClick={closeToggle}>
+                  <Link to="/login" className=" btn btn-primary nav-link"  >Login</Link>
+                </Nav.Item>
+                <Nav.Item className="mb-2 mr-2 " onClick={closeToggle}>
+                  <Link to="/register" className="btn btn-success nav-link"  >Register</Link>
+                </Nav.Item>
+              </>
+              : ""
+            }
+            <Nav.Item className="mb-2 text-center">
+              <input type="checkbox" id="themeToggle" className={styles.darkModeToggle} onChange={() => { toggleDarkMode() }} />
             </Nav.Item>
+
+
 
           </Nav>
         </Navbar.Collapse>
