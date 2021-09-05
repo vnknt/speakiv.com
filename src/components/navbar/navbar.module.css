@@ -5,11 +5,14 @@
     
   }
 
-.nav-link{
+.navlink{
   color:#fff !important;
-  border:1px solid #f00;
+  text-decoration: none;
 }
 
+.navButton{
+  color:#fff !important;
+}
 
 .darkModeToggle{
 

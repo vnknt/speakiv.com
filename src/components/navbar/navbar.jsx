@@ -65,11 +65,11 @@ export default function Navi() {
           <Nav className="ml-auto">
 
             <Nav.Item className="mb-2 " onClick={closeToggle} >
-              <Link to="/" className="nav-link btn">Home</Link>
+              <Link to="/" className={`w-100 btn btn-link ${styles.navlink}`}>Home</Link>
             </Nav.Item>
             {isLoggedIn ?
               <Nav.Item className="mb-2 " onClick={closeToggle}>
-                <Link to="/logout" className="nav-link btn btn-danger font-weight-bold"  >Logout</Link>
+                <Link to="/logout" className="w-100 btn btn-danger  "  >Logout</Link>
               </Nav.Item>
               : ""
             }
@@ -77,10 +77,10 @@ export default function Navi() {
             {!isLoggedIn ?
               <>
                 <Nav.Item className="mb-2 mr-2" onClick={closeToggle}>
-                  <Link to="/login" className=" btn btn-primary nav-link"  >Login</Link>
+                  <Link to="/login" className={`btn btn-primary w-100 ${styles.navButton}`}  >Login</Link>
                 </Nav.Item>
                 <Nav.Item className="mb-2 mr-2 " onClick={closeToggle}>
-                  <Link to="/register" className="btn btn-success nav-link"  >Register</Link>
+                  <Link to="/register" className={`btn btn-success w-100 ${styles.navButton}`}  >Register</Link>
                 </Nav.Item>
               </>
               : ""
