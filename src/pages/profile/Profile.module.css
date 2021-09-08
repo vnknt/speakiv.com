@@ -1,0 +1,9 @@
+.username{
+    font-weight: bold;
+    letter-spacing: 0.10rem;
+    font-size: 1.25rem;
+}
+
+.name{
+    font-weight: thin;
+}

@@ -8,7 +8,9 @@ import { logout } from '../../store/action/userAction';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
-import { Container } from 'semantic-ui-react';
+import { Button, Container, Dropdown, Image } from 'semantic-ui-react';
+import './navbar.css'
+
 export default function Navi() {
   const [colorTheme, setTheme] = useDarkMode();
   const [sidebarState, setSidebarState] = useSidebar();
@@ -57,7 +59,7 @@ export default function Navi() {
   return (
     <div >
 
-      <Navbar bg="dark" className="px-3" variant="dark" expand="sm" expanded={expanded} style={{ position: "fixed", width: "100%", zIndex: "9999" }}>
+      <Navbar bg="dark" className="px-3" variant="dark" expand="md" expanded={expanded} style={{ position: "fixed", width: "100%", zIndex: "9999" }}>
 
         <Link to="/" className="navbar-brand" onClick={closeToggle} >Speakiv</Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={handleExpanded} />
@@ -65,12 +67,30 @@ export default function Navi() {
           <Nav className="ml-auto">
 
             <Nav.Item className="mb-2 " onClick={closeToggle} >
-              <Link to="/" className={`w-100 btn btn-link ${styles.navlink}`}>Home</Link>
+              <Link to="/" className={`w-100 btn btn-link  ${styles.btnLink} ${styles.navLink}`}>Home</Link>
             </Nav.Item>
+            <Nav.Item className="mb-2 " onClick={closeToggle} >
+              <Link to="/profile" className={`w-100 btn btn-link d-flex align-item-center justify-content-center ${styles.btnLink} ${styles.navLink}`}>
+                <img className=" w-9 h-auto object-cover rounded-full mr-2" src="https://vnknt.github.io/assets/img/pp.jpg"/><span className="d-flex align-items-center">View Profile</span>
+              </Link>
+            </Nav.Item>
+
             {isLoggedIn ?
-              <Nav.Item className="mb-2 " onClick={closeToggle}>
-                <Link to="/logout" className="w-100 btn btn-danger  "  >Logout</Link>
-              </Nav.Item>
+              <div className="d-none d-md-block">
+                <div className="d-flex align-items-center justify-center px-3 py-0 ">
+                  <img className="h-9 w-9 " src="https://vnknt.github.io/assets/img/pp.jpg" />
+                  <NavDropdown title="asdad" id="collasible-nav-dropdown" >
+                    <NavDropdown.Item >
+                      <Link to="/profile" className={`w-100 btn btn-link ${styles.btnLink} ${styles.dropdownLink}`}>My Profile</Link>
+                    </NavDropdown.Item>
+                    <NavDropdown.Divider />
+
+                    <NavDropdown.Item ><Link to="/logout" className="w-100 btn btn-danger  "  >Logout</Link></NavDropdown.Item>
+                  </NavDropdown>
+
+                </div>
+
+              </div>
               : ""
             }
 

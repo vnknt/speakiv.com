@@ -5,8 +5,11 @@ import { Label, Image,Button } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 
 
-export default function RoomCard({id,title,language}) {
+export default function RoomCard({id,title,language,active_users}) {
     console.log(language)
+
+
+
     return (
         <div className="col-md-6 col-lg-4 col-xs-12 p-2  ">
         <div className={`${styles.roomCard}`}>
@@ -18,10 +21,13 @@ export default function RoomCard({id,title,language}) {
 
             </div>
             <div className={styles.users}>
-                <img alt="avatar" className={styles.userAvatar} src="https://vnknt.github.io/assets/img/pp.jpg"></img>
-                <img alt="avatar" className={styles.userAvatar} src="https://vnknt.github.io/assets/img/pp.jpg"></img>
-                <img alt="avatar" className={styles.userAvatar} src="https://vnknt.github.io/assets/img/pp.jpg"></img>
-
+                {
+                    active_users.map((u)=>{
+                        return (<img alt="avatar" className={styles.userAvatar} src={u.imgUrl}></img>)
+                    })
+                }
+                
+                
             </div>
 
             <div className={styles.footer}>
