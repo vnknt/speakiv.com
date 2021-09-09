@@ -19,6 +19,8 @@ export default function userReducer(state=initialState , {type,payLoad}){
                 localStorage.removeItem("refreshToken")
             
             }))        
+            localStorage.removeItem("accessToken")
+            localStorage.removeItem("refreshToken")
             
             console.log("logout")
             return false

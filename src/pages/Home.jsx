@@ -1,29 +1,81 @@
-import {React,useState,useEffect} from 'react'
+import { React, useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { io } from 'socket.io-client'
 import RoomCard from '../components/roomCard'
 import RoomService from '../services/roomService'
+import UserService from '../services/userService'
 
 
 export default function Home() {
-    const [rooms,setRooms] = useState([]) 
-
+    const [rooms, setRooms] = useState([])
+    const socket = useRef(io.connect(process.env.REACT_APP_SOCKET_URL + "/events", { query: { token: localStorage.getItem("accessToken") } }))
     useEffect(() => {
-        
+        socket.current.emit("subscribe-all")
+
         let roomService = new RoomService()
 
-        let rooms_data = roomService.getRooms().then((result)=>{
-            if(result.data.success===false){
+        let rooms_data = roomService.getRooms().then((result) => {
+            if (result.data.success === false) {
                 console.log(result.data.message)
                 return
             }
-            console.log(result.data.data)
-            setRooms([...result.data.data])
+            
+            setRooms(prevState=>[...result.data.data])
             
         })
-        console.log(rooms)
+        
+        
+
+
+
+        
+
+        
     }, [])
 
+    useEffect(()=>{
+        let userService = new UserService()
+        
+        socket.current.on('user-joined-room', (userId, roomId) => {
+            console.log(rooms)
+            const newRooms = [...rooms]
+            newRooms.map((room)=>{
+                
+                if(room._id === roomId){
+                    userService.getUserById(userId).then(result=>{
+                        room.active_users.push(result.data.data)
+                        setRooms(prevStete=>[...newRooms])
+                    })
+                    
+                }
+            })
 
+            
+        })
+
+
+        socket.current.on('user-left-room', (userId, roomId) => {
+            const newRooms = [...rooms]
+
+            newRooms.map((room)=>{
+
+                if(room._id ===roomId){
+                    room.active_users = room.active_users.filter((user)=>user._id !== userId)
+                }
+                setRooms(prevStete=>[...newRooms])
+
+            })
+        })
+
+
+
+        return ()=>{
+
+            socket.current.removeListener("user-joined-room",this)
+            socket.current.removeListener("user-left-room",this)
+            
+        }
+    },[rooms])
 
     return (
         <>
@@ -36,13 +88,13 @@ export default function Home() {
             </div>
             <div className="row">
                 
-                {rooms.map((room)=>{
+                {[...rooms].map((room) => {
                     <div className="">
-                        </div>
-                    return <RoomCard active_users={room.active_users} id={room._id} title={room.name} language={room.language.name} key={room.id}></RoomCard>
+                    </div>
+                    return <RoomCard room_info={room} ></RoomCard>
 
-                })} 
-                    
+                })}
+
             </div>
         </>
     )

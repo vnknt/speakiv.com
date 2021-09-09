@@ -25,7 +25,12 @@ export default function Navi() {
   const history = useHistory();
 
   useEffect(() => {
-
+    
+    if(localStorage.theme==='undefined'){
+      localStorage.theme ="dark"
+      
+      
+    }
     setTheme(localStorage.theme)
 
 
@@ -69,7 +74,7 @@ export default function Navi() {
             <Nav.Item className="mb-2 " onClick={closeToggle} >
               <Link to="/" className={`w-100 btn btn-link  ${styles.btnLink} ${styles.navLink}`}>Home</Link>
             </Nav.Item>
-            <Nav.Item className="mb-2 " onClick={closeToggle} >
+            <Nav.Item className="mb-2 d-md-none" onClick={closeToggle} >
               <Link to="/profile" className={`w-100 btn btn-link d-flex align-item-center justify-content-center ${styles.btnLink} ${styles.navLink}`}>
                 <img className=" w-9 h-auto object-cover rounded-full mr-2" src="https://vnknt.github.io/assets/img/pp.jpg"/><span className="d-flex align-items-center">View Profile</span>
               </Link>

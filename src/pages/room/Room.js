@@ -30,7 +30,7 @@ export default function Room(props) {
     const callsRef = useRef({})
     callsRef.current={}
 
-    const socket = useRef(io.connect(process.env.REACT_APP_SOCKET_URL,{query:{token:localStorage.getItem("accessToken")}}))
+    const socket = useRef(io.connect(process.env.REACT_APP_SOCKET_URL+"/room",{query:{token:localStorage.getItem("accessToken")}}))
     const peer = useRef(new Peer())
     
     // let peer = ;
