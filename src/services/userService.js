@@ -49,6 +49,12 @@ export default class UserService{
 
 
 
+    checkRefreshToken(){
+
+        return axios.post(`http://${apiUrl}/auth/checkRefreshToken`,{token:localStorage.getItem("refreshToken")})
+
+    }
+
 
 
 }
