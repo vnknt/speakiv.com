@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { Button, Container, Dropdown, Image } from 'semantic-ui-react';
 import './navbar.css'
+import UserService from '../../services/userService';
 
 export default function Navi() {
   const [colorTheme, setTheme] = useDarkMode();
@@ -28,11 +29,9 @@ export default function Navi() {
     
     if(localStorage.theme==='undefined'){
       localStorage.theme ="dark"
-      
-      
     }
     setTheme(localStorage.theme)
-
+    
 
   }, [])
 
@@ -83,8 +82,8 @@ export default function Navi() {
             {isLoggedIn ?
               <div className="d-none d-md-block">
                 <div className="d-flex align-items-center justify-center px-3 py-0 ">
-                  <img className="h-9 w-9 " src="https://vnknt.github.io/assets/img/pp.jpg" />
-                  <NavDropdown title="asdad" id="collasible-nav-dropdown" >
+                  <img className="h-9 w-9 rounded-full " src="https://vnknt.github.io/assets/img/pp.jpg" />
+                  <NavDropdown title="Me" id="collasible-nav-dropdown" >
                     <NavDropdown.Item >
                       <Link to="/profile" className={`w-100 btn btn-link ${styles.btnLink} ${styles.dropdownLink}`}>My Profile</Link>
                     </NavDropdown.Item>

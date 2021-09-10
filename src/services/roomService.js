@@ -11,13 +11,13 @@ export default class RoomService{
     getRooms(){
 
 
-        return CustomAxios.jwt().get(`http://${apiUrl}/rooms/`)
+        return CustomAxios.jwt().get(`${apiUrl}/rooms/`)
 
     }
 
     getRoomById(roomId){
 
-        return CustomAxios.jwt().get(`http://${apiUrl}/rooms/${roomId}`)
+        return CustomAxios.jwt().get(`${apiUrl}/rooms/${roomId}`)
 
     }
 
@@ -25,7 +25,7 @@ export default class RoomService{
 
 
     createRoom(values){
-        return CustomAxios.jwt().post(`http://${apiUrl}/rooms/`,{name:values.title,lang_code:values.language,level:values.level,user_limit:values.limit})
+        return CustomAxios.jwt().post(`${apiUrl}/rooms/`,{name:values.title,lang_code:values.language,level:values.level,user_limit:values.limit})
 
     }
 

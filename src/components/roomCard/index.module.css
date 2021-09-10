@@ -1,8 +1,6 @@
 .roomCard{
     @apply
     bg-gray-50 bg-opacity-40 dark:bg-gray-500 dark:bg-opacity-30 dark:text-white 
-    
-
     border-2
     rounded-lg
     px-4 py-4
@@ -42,8 +40,6 @@
     @apply
     w-12
     rounded-full
-    border-2
-    border-white
     mr-3
     shadow-lg
     ;
