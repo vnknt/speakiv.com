@@ -9,18 +9,18 @@ export default class UserService{
 
     login(username,password){
 
-        return axios.post(`http://${apiUrl}/auth/login`,{username:username,password:password})
+        return axios.post(`${apiUrl}/auth/login`,{username:username,password:password})
 
     }
 
     getUserById(userId){
-        return axios.get(`http://${apiUrl}/users/getById/${userId}`)
+        return axios.get(`${apiUrl}/users/getById/${userId}`)
     }
 
 
     logout(){
 
-        return CustomAxios.jwt().post(`http://${apiUrl}/auth/logout`)
+        return CustomAxios.jwt().post(`${apiUrl}/auth/logout`)
         
     }
 
@@ -29,7 +29,7 @@ export default class UserService{
     register(data){
 
 
-        return axios.post(`http://${apiUrl}/users/register`,{
+        return axios.post(`${apiUrl}/users/register`,{
             name:data.name,
             username:data.username,
             email:data.email,
@@ -42,7 +42,7 @@ export default class UserService{
     refreshToken(){
 
 
-        return axios.post(`http://${apiUrl}/auth/refreshToken`,{token:localStorage.getItem("refreshToken")})
+        return axios.post(`${apiUrl}/auth/refreshToken`,{token:localStorage.getItem("refreshToken")})
 
 
     }
@@ -51,10 +51,13 @@ export default class UserService{
 
     checkRefreshToken(){
 
-        return axios.post(`http://${apiUrl}/auth/checkRefreshToken`,{token:localStorage.getItem("refreshToken")})
+        return axios.post(`${apiUrl}/auth/checkRefreshToken`,{token:localStorage.getItem("refreshToken")})
 
     }
 
-
+    async uploadProfileImage(base64EncodedImage){
+       
+        return CustomAxios.jwt().post(`${apiUrl}/users/uploadProfileImage`,{data:base64EncodedImage})
+    }
 
 }
