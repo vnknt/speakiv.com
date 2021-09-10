@@ -16,7 +16,7 @@ export default function Navi() {
   const [colorTheme, setTheme] = useDarkMode();
   const [sidebarState, setSidebarState] = useSidebar();
   const [expanded, setExpanded] = useState(false);
-
+  const [imgUrl,setImgUrl] = useState("https://cdn-icons-png.flaticon.com/512/149/149071.png")
 
 
   const isLoggedIn = useSelector(state => state.user);
@@ -25,15 +25,22 @@ export default function Navi() {
 
   const history = useHistory();
 
-  useEffect(() => {
+  useEffect(async () => {
     
     if(localStorage.theme==='undefined'){
       localStorage.theme ="dark"
     }
     setTheme(localStorage.theme)
-    
+    if(isLoggedIn){
+      let userService = new UserService()
+      let response = await userService.getUserById("")
+      if(response.data.success){
+        setImgUrl(response.data.data.imgUrl)
+      }
 
-  }, [])
+    }
+
+  }, [isLoggedIn])
 
   const toggleDarkMode = () => {
     setTheme(colorTheme)
@@ -75,14 +82,14 @@ export default function Navi() {
             </Nav.Item>
             <Nav.Item className="mb-2 d-md-none" onClick={closeToggle} >
               <Link to="/profile" className={`w-100 btn btn-link d-flex align-item-center justify-content-center ${styles.btnLink} ${styles.navLink}`}>
-                <img className=" w-9 h-auto object-cover rounded-full mr-2" src="https://vnknt.github.io/assets/img/pp.jpg"/><span className="d-flex align-items-center">View Profile</span>
+                <img className=" w-9 h-auto object-cover rounded-full mr-2" src={`${imgUrl}`}/><span className="d-flex align-items-center">View Profile</span>
               </Link>
             </Nav.Item>
 
             {isLoggedIn ?
               <div className="d-none d-md-block">
                 <div className="d-flex align-items-center justify-center px-3 py-0 ">
-                  <img className="h-9 w-9 rounded-full " src="https://vnknt.github.io/assets/img/pp.jpg" />
+                  <img className="h-9 w-9 rounded-full " src={`${imgUrl}`} />
                   <NavDropdown title="Me" id="collasible-nav-dropdown" >
                     <NavDropdown.Item >
                       <Link to="/profile" className={`w-100 btn btn-link ${styles.btnLink} ${styles.dropdownLink}`}>My Profile</Link>
