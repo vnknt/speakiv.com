@@ -6,6 +6,7 @@ import { Redirect, useHistory, useParams } from 'react-router'
 import { toast } from 'react-toastify'
 import styles from './Profile.module.css'
 import UserService from '../../services/userService'
+import ImageUploadModal from '../../components/imageUploadModal/ImageUploadModal'
 export default function Profile() {
     const isLogged = useSelector(store => store.user)
     let dispatch = useDispatch()
@@ -13,6 +14,9 @@ export default function Profile() {
     let history = useHistory()
     const [user, setUser] = useState({ name: "", username: "", imgUrl: "" })
     const [isMyProfile, setIsMyProfile] = useState(false)
+
+
+    const [showImageModal,setShowImageModal] = useState(false) 
 
 
     useEffect(async () => {
@@ -36,32 +40,45 @@ export default function Profile() {
         }
 
 
-        console.log(userData)
-
-
-
-
-
-
-
-        console.log(userId)
+    
 
     }, [])
 
+    function openImageUploadModal(){
+        
+        setShowImageModal(true)
+    }
 
+    function updateImageUrl(url){
+        
+        setUser({...user,imgUrl:url})
 
+    }
 
     return (
 
 
         isLogged ?
+
+        
+
             <div className="row">
-                
+                <ImageUploadModal
+                    setShow={setShowImageModal}
+                    show={showImageModal}
+                    onHide={() => setShowImageModal(false)}
+                    size="xl"
+                    aria-labelledby="example-custom-modal-styling-title"
+                    updateImageUrl={updateImageUrl}
+                ></ImageUploadModal>
+
                 <div className="col-12 d-flex justify-content-center " >
                     <div className="col-6 col-md-3 col-lg-2 text-center " >
                         <div className="row d-flex justify-content-center">
-                            <div className="col-8">
+                            <div className="col-8 position-relative">
                                 <img className=" rounded-full object-cover" src={user.imgUrl} />
+                                <button onClick={()=>{openImageUploadModal()}} className="position-absolute bottom-0 text-2xl  end-0 "><i className="camera icon"></i></button>
+                                
                             </div>
                         </div>
 
