@@ -14,7 +14,7 @@ export default class UserService{
     }
 
     getUserById(userId){
-        return axios.get(`${apiUrl}/users/getById/${userId}`)
+        return CustomAxios.jwt().get(`${apiUrl}/users/getById/${userId}`)
     }
 
 
