@@ -1,25 +1,21 @@
 .connectedUserCard{
     
-    height: 100px;
     
-
-
-
 }
 
 
 .audio_active{
 
     @apply
-    border-2
-    border-green-500;
+    border-4
+    border-green-700;
 
 }
 
 .audio_default{
 
     @apply
-    border-2
+    border-4
     border-gray-500
     border-opacity-50
     

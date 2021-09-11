@@ -219,7 +219,7 @@ async function isRoomExist(){
     
         
         <>
-        {activeUsers.length}
+        
         {activeUsers.map(i=>{
             return(<h1>{i.userName}</h1>)
         })}

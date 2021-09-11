@@ -18,14 +18,14 @@ export default function ActiveUsersWrapper({users}) {
     let i=0;
     return (
         
-        <div className="row border-2 border-red-500" id="online-users" >
+        <div className="row " id="online-users" >
             
             { 
                 
                 activeUsers.map((user)=>{
                     
                     return(
-                    <ConnectedUserCard profileImg={user.imgUrl} userName={user.username} stream={user.stream} key={`user-cart-${i++}`}></ConnectedUserCard>             
+                    <ConnectedUserCard user={user}  key={`user-cart-${i++}`}></ConnectedUserCard>             
                         )
                 })
             }

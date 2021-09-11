@@ -12,7 +12,8 @@ export default function RoomCard({room_info}) {
     let language = room_info.language
     let active_users=room_info.active_users
     let level = room_info.level
-    
+    let totalUser = room_info.active_users.length
+    let display_users = active_users.slice(0,4)
     return (
         <div className="col-md-6 col-lg-4 col-xs-12 p-2  ">
         <div className={`${styles.roomCard}`}>
@@ -23,13 +24,17 @@ export default function RoomCard({room_info}) {
                 </div>
 
             </div>
-            <div className={styles.users}>
+            <div className={`${styles.users} mt-2 mb-2`}>
                 {
-                    active_users.map((u)=>{
-                        return (<img alt="avatar" className={styles.userAvatar} src={u.imgUrl}></img>)
+                    
+                    display_users.map((u)=>{
+                        return (<img alt="user-avatar" title={`${u.username}`} className={styles.userAvatar} src={u.imgUrl}></img>)
                     })
                     
                 }
+                {totalUser>4?
+                <div className="w-12 rounded-full border-2 border-gray-400 flex justify-content-center align-items-center "><b>+{totalUser-4}</b></div>
+                :""}
             </div>
 
             <div className={styles.footer}>

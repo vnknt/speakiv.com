@@ -26,6 +26,7 @@
 .users{
     @apply 
     flex
+    h-12
     ;
 }
 
