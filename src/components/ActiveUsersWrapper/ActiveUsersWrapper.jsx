@@ -22,10 +22,10 @@ export default function ActiveUsersWrapper({users}) {
             
             { 
                 
-                activeUsers.map((item)=>{
+                activeUsers.map((user)=>{
                     
                     return(
-                    <ConnectedUserCard profileImg={item.profileImg} userName={item.userName} stream={item.stream} key={`user-cart-${i++}`}></ConnectedUserCard>             
+                    <ConnectedUserCard profileImg={user.imgUrl} userName={user.username} stream={user.stream} key={`user-cart-${i++}`}></ConnectedUserCard>             
                         )
                 })
             }

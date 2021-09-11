@@ -66,11 +66,12 @@ export default function Room(props) {
                 
                 let userService = new UserService()
                 let userResult = await userService.getUserById(userId);
-                console.log(userResult)
+                if(userResult.data.success){
+                    let user  =userResult.data.data
+                    let currentUserArr = [{...user,stream:stream}]
+                    setActiveUsers(arr=>[...arr,...currentUserArr])
+                }
                 
-                let currentUserArr = [{userName:userResult.data.data.username, profileImg:"image ",stream:stream}]
-                
-                setActiveUsers(arr=>[...arr,...currentUserArr])
                 
                 
 
@@ -87,20 +88,7 @@ export default function Room(props) {
 
     const handleDisconnect = (userId)=>{
         
-        let filtered = activeUsers.filter(user=>{return user.id !==userId})
-        console.log("CALLS:::::::::::::::::::.")
-        console.log(callsRef)
-        //   try{
-        //       calls[userId].close()
-        //   }catch(e){
-        //       console.log(e.message)
-        //   }
-            
-        
-
-        setActiveUsers(arr=>[...filtered])
-
-        
+        setActiveUsers(arr=>[...arr].filter(user=>user._id!==userId))
 
     }
 
@@ -165,14 +153,12 @@ export default function Room(props) {
             call.on('stream', async(stream) => {
                 
                 let userService = new UserService()
-                
                 let userResult = await userService.getUserById(userId);
-                console.log(`USER_ID : ${userId}`)
-                
-                let currentUserArr = [{userName:userResult.data.data.username, profileImg:"image ",stream:stream}]
-                
-                setActiveUsers(arr=>[...arr,...currentUserArr])
-                
+                if(userResult.data.success){
+                    let user  =userResult.data.data
+                    let currentUserArr = [{...user,stream:stream}]
+                    setActiveUsers(arr=>[...arr,...currentUserArr])
+                }
 
             })
 
@@ -233,7 +219,7 @@ async function isRoomExist(){
     
         
         <>
-        
+        {activeUsers.length}
         {activeUsers.map(i=>{
             return(<h1>{i.userName}</h1>)
         })}
