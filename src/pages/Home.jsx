@@ -6,17 +6,24 @@ import RoomCard from '../components/roomCard'
 import RoomService from '../services/roomService'
 import UserService from '../services/userService'
 import { displayIf } from '../utilities/helpers/displayIf'
-
+import CustomSelectInput from '../utilities/customForm/CustomSelectInput'
+import LanguageService from '../services/languageService'
+import { Formik } from 'formik'
 
 export default function Home() {
     const [rooms, setRooms] = useState([])
+    const [filteredRooms, setFilteredRooms] = useState([])
+    const [languages, setLanguages] = useState([])
     const [pageLoaded, setPageLoaded] = useState(false)
     const socket = useRef(io.connect(process.env.REACT_APP_SOCKET_URL + "/events", { query: { token: localStorage.getItem("accessToken") } }))
-    useEffect(() => {
+    let langObject = {}
+    const [filterLevel,setFilterLevel] = useState(null)
+    const [filterLang,setFilterLang] = useState(null)
+    useEffect(async () => {
         socket.current.emit("subscribe-all")
 
         let roomService = new RoomService()
-
+        let languageService = new LanguageService()
         let rooms_data = roomService.getRooms().then((result) => {
             if (result.data.success === false) {
                 console.log(result.data.message)
@@ -24,13 +31,25 @@ export default function Home() {
             }
 
             setRooms(prevState => [...result.data.data])
+
             setPageLoaded(true)
         })
 
 
+        let langs = await languageService.getLanguages()
+
+
+        langs.data.data.map(lang => {
+
+            langObject[lang.code] = lang.name
+
+        })
+
+        setLanguages(langObject)
+
     }, [])
 
-    useEffect(() => {
+    useEffect(async () => {
         let userService = new UserService()
 
         socket.current.on('user-joined-room', (userId, roomId) => {
@@ -64,7 +83,7 @@ export default function Home() {
             })
         })
 
-
+        setFilteredRooms(await rooms)
 
         return () => {
 
@@ -74,6 +93,34 @@ export default function Home() {
         }
     }, [rooms])
 
+    useEffect(()=>{
+        console.log(filterLang,filterLevel)
+        setFilteredRooms( rooms.filter((room) => {
+            
+            
+            return  (filterCompare(room.language.code, filterLang) && filterCompare(room.level, filterLevel))
+        }))
+    },[filterLang,filterLevel])
+
+
+    function filterCompare(obj, val) {
+       
+        return String(val) === "default" || val === null ? true : String(obj) === String(val)
+
+    }
+
+    
+
+    function filterByLang(lang) {
+         setFilterLang(lang)
+        
+
+    }
+    function filterByLevel(level) {
+        
+         setFilterLevel(level)
+       
+    }
     return (
         <>
             <div className="row">
@@ -87,8 +134,16 @@ export default function Home() {
             <div className={displayIf(pageLoaded)}>
 
                 <div className="row">
+                    <Formik >
+                        <div className="col-12 d-flex justify-end">
+                            <div className="mr-2">
+                                <CustomSelectInput onChange={(e) => { filterByLang(e.target.value) }} className="mb-2  form-control text-black  px-3" name="language" options={languages} default="All Languages" key={"langs"}></CustomSelectInput>
+                            </div>
+                            <CustomSelectInput onChange={(e) => { filterByLevel(e.target.value) }} className="mb-2 form-control text-black  px-3" name="language" options={{ "1": "Beginner", "2": "Elementary", "3": "Intermediate", "4": "Advanced" }} default="All Levels" key={"langs"}></CustomSelectInput>
+                        </div>
+                    </Formik>
 
-                    {[...rooms].map((room) => {
+                    {filteredRooms.map((room) => {
                         <div className="">
                         </div>
                         return <RoomCard room_info={room} ></RoomCard>
