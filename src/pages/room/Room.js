@@ -30,14 +30,31 @@ export default function Room(props) {
     const callsRef = useRef({})
     callsRef.current={}
 
-    const socket = useRef(io.connect(process.env.REACT_APP_SOCKET_URL+"/room",{query:{token:localStorage.getItem("accessToken")}}))
-    const peer = useRef(new Peer())
+    const socket = useRef()
+    const peer = useRef(new Peer(
+        {
+            config: {'iceServers': [
+                {url:'stun:stun.l.google.com:19302'},
+                {
+                    url: 'turn:numb.viagenie.ca',
+                    credential: 'muazkh',
+                    username: 'webrtc@live.com'
+                    }
+            ]} 
+          }))
     
     // let peer = ;
 
     let { roomId } = useParams()
 
-
+    useEffect(()=>{
+        let accessToken = localStorage.getItem("accessToken")
+        socket.current = io.connect(process.env.REACT_APP_SOCKET_URL+`/room`,{query:{token:accessToken},'force new connection':true})
+        
+        return ()=>{
+            socket.current.close()
+        }
+    },[])
     useEffect(()=>{
 
         console.log(activeUsers)
@@ -47,7 +64,7 @@ export default function Room(props) {
 
 
     const handleConnect = (remotePeerId,userId) => {
-
+        console.log(remotePeerId,userId)
         if(userId===selfUserId){
             return
         }
@@ -95,14 +112,12 @@ export default function Room(props) {
 
 
     const joinRoom = () => {
-
-
+        
+        
         setJoined(true)
-
         socket.current.emit("join-room", roomId, peerId)
-
         socket.current.on('user-connected', (userId,peerId) => {
-           
+            console.log("user-connected",peerId,userId)
             handleConnect(peerId,userId)
 
         })
@@ -112,6 +127,7 @@ export default function Room(props) {
                 handleDisconnect(userId)
             }
         })
+        
 
     }
 
@@ -129,9 +145,14 @@ export default function Room(props) {
 
 
 
-    useEffect(async ()=>{
-        let id = await jwtDecode(localStorage.getItem("accessToken")).user_id
-        setSelfUserId(id)
+    useEffect(()=>{
+        let id;
+        async function decode(){
+            id = jwtDecode(localStorage.getItem("accessToken")).user_id
+            setSelfUserId(id)
+        }
+        decode()
+        
     },[])
 
 
@@ -224,7 +245,7 @@ async function isRoomExist(){
             return(<h1>{i.userName}</h1>)
         })}
             <div className={`d-flex justify-content-center pt-5 mt-5 ${joined ? "d-none " : " d-block"}`} >
-                <button onClick={joinRoom} className="btn btn-primary" disabled={!isAbleToJoin}>Join Room</button>
+                <button onClick={()=>{joinRoom()}} className="btn btn-primary" disabled={!isAbleToJoin}>Join Room</button>
             </div>
             <div className={`container ${!joined ? "d-none " : " d-block"}`} >
                 <div className="row ">
