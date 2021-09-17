@@ -257,11 +257,6 @@ export default function Room(props) {
                     </div>
                     <div className={`container ${!joined ? "d-none " : " d-block"}`} >
                         <div className="row">
-                            <div className="col-12">
-                                <ButtonEndCall></ButtonEndCall>
-                                <ButtonMicrophone></ButtonMicrophone>
-                            </div>
-
                             <ActiveUsersWrapper users={activeUsers}></ActiveUsersWrapper>
                         </div>
 
