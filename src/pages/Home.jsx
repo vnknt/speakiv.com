@@ -49,7 +49,7 @@ export default function Home() {
 
     }, [])
 
-    useEffect(async () => {
+    useEffect(() => {
         let userService = new UserService()
 
         socket.current.on('user-joined-room', (userId, roomId) => {
@@ -83,7 +83,7 @@ export default function Home() {
             })
         })
 
-        setFilteredRooms(await rooms)
+        setFilteredRooms(rooms)
 
         return () => {
 
