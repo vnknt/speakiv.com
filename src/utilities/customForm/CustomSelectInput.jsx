@@ -17,7 +17,7 @@ export default function CustomSelectInput(props) {
         <div>
             <FormField style={{position:"relative"}} error={ meta.touched && !!meta.error} >
                 <select {...field} {...props} >
-                    <option>{props.default}</option>
+                    <option value={"default"}>{props.default}</option>
                     
                     {props.options &&
 
