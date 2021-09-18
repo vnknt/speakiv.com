@@ -24,6 +24,7 @@ export default function Room(props) {
     const [joined, setJoined] = useState(false)
     const [isAbleToJoin, setIsAbleToJoin] = useState(false)
     const [stream, setStream] = useState(null)
+    const [microphoneState, setMicrophoneState] = useState(false)
     const [activeUsers, setActiveUsers] = useState([])
     const mediaStreamRef = useRef()
     const history = useHistory()
@@ -54,15 +55,14 @@ export default function Room(props) {
     useEffect(() => {
         let accessToken = localStorage.getItem("accessToken")
         socket.current = io.connect(process.env.REACT_APP_SOCKET_URL + `/room`, { query: { token: accessToken }, 'force new connection': true })
-        navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(stream => {
-            setStream(stream)
+        navigator.mediaDevices.getUserMedia({ audio: {echoCancellation:false, autoGainControl: false, noiseSuppression: false}, video: false }).then(stream => {
             mediaStreamRef.current = stream
         })
         return () => {
             socket.current.close()
-            mediaStreamRef.current.getTracks().forEach(function(track) {
+            mediaStreamRef.current.getTracks().forEach(function (track) {
                 track.stop();
-              });
+            }); 
         }
     }, [])
     useEffect(() => {
@@ -80,27 +80,31 @@ export default function Room(props) {
         }
 
 
+        
+            const call = peer.current.call(remotePeerId, mediaStreamRef.current, { metadata: { userId: selfUserId } })
 
-        const call = peer.current.call(remotePeerId, stream, { metadata: { userId: selfUserId } })
+
+            callsRef.current[userId] = call
+
+
+            call.on("stream", async (stream) => {
+
+                let userService = new UserService()
+                let userResult = await userService.getUserById(userId);
+                if (userResult.data.success) {
+                    let user = userResult.data.data
+                    let currentUserArr = [{ ...user, stream: stream }]
+                    setActiveUsers(arr => [...arr, ...currentUserArr])
+                }
+
+
+
+
+            })
+
+
 
         
-        callsRef.current[userId] = call
-
-
-        call.on("stream", async (stream) => {
-
-            let userService = new UserService()
-            let userResult = await userService.getUserById(userId);
-            if (userResult.data.success) {
-                let user = userResult.data.data
-                let currentUserArr = [{ ...user, stream: stream }]
-                setActiveUsers(arr => [...arr, ...currentUserArr])
-            }
-
-
-
-
-        })
 
 
 
@@ -172,7 +176,9 @@ export default function Room(props) {
         peer.current.on('call', (call) => {
             let userId = call.metadata.userId
 
-            call.answer(stream)
+            call.answer(mediaStreamRef.current)
+
+
             //setCalls([...calls,call])
             callsRef.current[userId] = call
 
@@ -190,10 +196,6 @@ export default function Room(props) {
                 }
 
             })
-
-
-
-
         })
         peer.current.on('open', (id) => {
 
@@ -221,7 +223,13 @@ export default function Room(props) {
     }, [])
 
 
-
+    useEffect(() => {
+        if(mediaStreamRef.current !==undefined){
+            mediaStreamRef.current.getAudioTracks().forEach((track)=>{
+                track.enabled=microphoneState
+            })
+        }
+    }, [mediaStreamRef.current, microphoneState])
 
     async function isRoomExist() {
 
@@ -257,6 +265,11 @@ export default function Room(props) {
                     </div>
                     <div className={`container ${!joined ? "d-none " : " d-block"}`} >
                         <div className="row">
+                            <div className="col-12 d-flex justify-content-center">
+                                <ButtonEndCall className="mr-3"></ButtonEndCall>
+                                <ButtonMicrophone microphoneState={microphoneState} setMicrophoneState={setMicrophoneState}></ButtonMicrophone>
+                            </div>
+
                             <ActiveUsersWrapper users={activeUsers}></ActiveUsersWrapper>
                         </div>
 

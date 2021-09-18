@@ -1,9 +1,17 @@
 import React from 'react'
 
 export default function ButtonMicrophone(props) {
+    let {microphoneState,setMicrophoneState,...fields} = props
+
+
+    function toggleMicrophone(){
+        setMicrophoneState(!microphoneState)
+    }
+
+
     return (
-        <>
-            <button className="text-3xl w-12 h-12 rounded-full bg-green-800 text-gray-300 text-center"><i className="microphone icon"></i></button>
-        </>
+        <div {...fields}>
+            <button onClick={toggleMicrophone} className={`text-3xl w-12 h-12 rounded-full  ${(!microphoneState)?"bg-yellow-800 bg-opacity-60":"bg-green-700"} text-gray-100 text-center`}><i className={`microphone ${(!microphoneState)?"slash":""} icon`}></i></button>
+        </div>
     )
 }
